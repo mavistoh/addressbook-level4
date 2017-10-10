@@ -2,7 +2,7 @@ package seedu.address.model;
 
 import java.util.function.Predicate;
 
-import javafx.collections.ObservableList;
+import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
@@ -11,9 +11,6 @@ import seedu.address.model.person.exceptions.PersonNotFoundException;
  * The API of the Model component.
  */
 public interface Model {
-    /** {@code Predicate} that always evaluate to true */
-    Predicate<ReadOnlyPerson> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
-
     /** Clears existing backing model and replaces with the provided new data. */
     void resetData(ReadOnlyAddressBook newData);
 
@@ -36,13 +33,13 @@ public interface Model {
     void updatePerson(ReadOnlyPerson target, ReadOnlyPerson editedPerson)
             throws DuplicatePersonException, PersonNotFoundException;
 
-    /** Returns an unmodifiable view of the filtered person list */
-    ObservableList<ReadOnlyPerson> getFilteredPersonList();
+    /** Returns the filtered person list as an {@code UnmodifiableObservableList<ReadOnlyPerson>} */
+    UnmodifiableObservableList<ReadOnlyPerson> getFilteredPersonList();
 
-    /**
-     * Updates the filter of the filtered person list to filter by the given {@code predicate}.
-     * @throws NullPointerException if {@code predicate} is null.
-     */
+    /** Updates the filter of the filtered person list to show all persons */
+    void updateFilteredListToShowAll();
+
+    /** Updates the filter of the filtered person list to filter by the given {@code predicate}*/
     void updateFilteredPersonList(Predicate<ReadOnlyPerson> predicate);
 
 }

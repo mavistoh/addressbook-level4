@@ -1,5 +1,17 @@
 package seedu.address.testutil;
 
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+
+
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
@@ -51,8 +63,7 @@ public class TypicalPersons {
     public static final ReadOnlyPerson[] TYPICAL_PERSONS =
             new ReadOnlyPerson[]{ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE};
 
-    private TypicalPersons() {
-    } // prevents instantiation
+    private TypicalPersons() {} // prevents instantiation
 
     /**
      * Loads the {@code ab} with all the typical persons.
@@ -72,5 +83,4 @@ public class TypicalPersons {
         loadAddressBookWithSampleData(ab);
         return ab;
     }
-
 }

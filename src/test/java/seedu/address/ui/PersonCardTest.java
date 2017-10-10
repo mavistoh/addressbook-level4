@@ -9,6 +9,7 @@ import static seedu.address.ui.testutil.GuiTestAssert.assertCardDisplaysPerson;
 import org.junit.Test;
 
 import guitests.guihandles.PersonCardHandle;
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.testutil.PersonBuilder;
@@ -16,7 +17,7 @@ import seedu.address.testutil.PersonBuilder;
 public class PersonCardTest extends GuiUnitTest {
 
     @Test
-    public void display() {
+    public void display() throws IllegalValueException {
         // no tags
         Person personWithNoTags = new PersonBuilder().withTags(new String[0]).build();
         PersonCard personCard = new PersonCard(personWithNoTags, 1);
@@ -42,7 +43,7 @@ public class PersonCardTest extends GuiUnitTest {
     }
 
     @Test
-    public void equals() {
+    public void equals() throws IllegalValueException {
         Person person = new PersonBuilder().build();
         PersonCard personCard = new PersonCard(person, 0);
 

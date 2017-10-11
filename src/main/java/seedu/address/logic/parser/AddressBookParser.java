@@ -93,12 +93,10 @@ public class AddressBookParser {
             return new HistoryCommand();
 
         case ExitCommand.COMMAND_WORD:
-            case ExitCommand.COMMAND_ALIAS:
                 logger.info("*" + commandWord + "*");
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
-            case HelpCommand.COMMAND_ALIAS:
                 logger.info("*" + commandWord + "*");
             return new HelpCommand();
 

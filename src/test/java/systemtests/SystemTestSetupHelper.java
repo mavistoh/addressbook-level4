@@ -1,12 +1,15 @@
 package systemtests;
 
+import java.nio.file.Path;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
 
 import org.testfx.api.FxToolkit;
 
 import guitests.guihandles.MainWindowHandle;
+import javafx.stage.Stage;
 import seedu.address.TestApp;
-import seedu.address.testutil.TypicalPersons;
+import seedu.address.model.ReadOnlyAddressBook;
 
 /**
  * Contains helper methods that system tests require.
@@ -16,23 +19,23 @@ public class SystemTestSetupHelper {
     private MainWindowHandle mainWindowHandle;
 
     /**
-     * Sets up the {@code TestApp} and returns it.
+     * Sets up a new {@code TestApp} and returns it.
      */
-    public TestApp setupApplication() {
+    public TestApp setupApplication(Supplier<ReadOnlyAddressBook> addressBook, Path saveFileLocation) {
         try {
-            FxToolkit.setupApplication(() -> testApp = new TestApp(TypicalPersons::getTypicalAddressBook,
-                    TestApp.SAVE_LOCATION_FOR_TESTING));
+            FxToolkit.registerStage(Stage::new);
+            FxToolkit.setupApplication(() -> testApp = new TestApp(addressBook, saveFileLocation));
         } catch (TimeoutException te) {
-            throw new AssertionError("Application takes too long to set up.");
+            throw new AssertionError("Application takes too long to set up.", te);
         }
 
         return testApp;
     }
 
     /**
-     * Initializes the stage to be used by the tests.
+     * Initializes TestFX.
      */
-    public static void initializeStage() {
+    public static void initialize() {
         try {
             FxToolkit.registerPrimaryStage();
             FxToolkit.hideStage();
@@ -42,7 +45,7 @@ public class SystemTestSetupHelper {
     }
 
     /**
-     * Encapsulates the stage initialized by {@code initializeStage} in a {@code MainWindowHandle} and returns it.
+     * Encapsulates the primary stage of {@code TestApp} in a {@code MainWindowHandle} and returns it.
      */
     public MainWindowHandle setupMainWindowHandle() {
         try {
@@ -52,7 +55,7 @@ public class SystemTestSetupHelper {
             });
             FxToolkit.showStage();
         } catch (TimeoutException te) {
-            throw new AssertionError("Stage takes too long to set up.");
+            throw new AssertionError("Stage takes too long to set up.", te);
         }
 
         return mainWindowHandle;
@@ -65,7 +68,7 @@ public class SystemTestSetupHelper {
         try {
             FxToolkit.cleanupStages();
         } catch (TimeoutException te) {
-            throw new AssertionError("Stage takes too long to tear down.");
+            throw new AssertionError("Stage takes too long to tear down.", te);
         }
     }
 }

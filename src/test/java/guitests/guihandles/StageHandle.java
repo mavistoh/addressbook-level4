@@ -1,6 +1,7 @@
 package guitests.guihandles;
 
 import static java.util.Objects.requireNonNull;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -16,7 +17,7 @@ import seedu.address.commons.core.LogsCenter;
  */
 public abstract class StageHandle {
     protected final GuiRobot guiRobot = new GuiRobot();
-    private final Logger logger = LogsCenter.getLogger(this.getClass());
+    private final Logger logger = LogsCenter.getLogger(getClass());
 
     private final Stage stage;
 
@@ -29,7 +30,7 @@ public abstract class StageHandle {
      */
     public void close() {
         guiRobot.interact(stage::close);
-        assert !stage.isShowing();
+        assertFalse(stage.isShowing());
     }
 
     /**
@@ -40,6 +41,13 @@ public abstract class StageHandle {
         logger.info("Focusing on" + windowTitle);
         guiRobot.interact(stage::requestFocus);
         logger.info("Finishing focus on" + windowTitle);
+    }
+
+    /**
+     * Returns true if currently focusing on this stage.
+     */
+    public boolean isFocused() {
+        return stage.isFocused();
     }
 
     /**

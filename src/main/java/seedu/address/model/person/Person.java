@@ -1,132 +1,105 @@
 package seedu.address.model.person;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.tag.UniqueTagList;
 
 /**
  * Represents a Person in the address book.
- * Guarantees: details are present and not null, field values are validated.
+ * Guarantees: details are present and not null, field values are validated, immutable.
  */
-public class Person implements ReadOnlyPerson {
+public class Person {
 
-    private ObjectProperty<Name> name;
-    private ObjectProperty<Phone> phone;
-    private ObjectProperty<Email> email;
-    private ObjectProperty<Address> address;
+    // Identity fields
+    private final Name name;
+    private final Phone phone;
+    private final Email email;
 
-    private ObjectProperty<UniqueTagList> tags;
+    // Data fields
+    private final Address address;
+    private final Remark remark;
+    private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Remark remark, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
-        this.name = new SimpleObjectProperty<>(name);
-        this.phone = new SimpleObjectProperty<>(phone);
-        this.email = new SimpleObjectProperty<>(email);
-        this.address = new SimpleObjectProperty<>(address);
-        // protect internal tags from changes in the arg list
-        this.tags = new SimpleObjectProperty<>(new UniqueTagList(tags));
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.remark = remark;
+        this.tags.addAll(tags);
     }
 
-    /**
-     * Creates a copy of the given ReadOnlyPerson.
-     */
-    public Person(ReadOnlyPerson source) {
-        this(source.getName(), source.getPhone(), source.getEmail(), source.getAddress(),
-                source.getTags());
-    }
-
-    public void setName(Name name) {
-        this.name.set(requireNonNull(name));
-    }
-
-    @Override
-    public ObjectProperty<Name> nameProperty() {
+    public Name getName() {
         return name;
     }
 
-    @Override
-    public Name getName() {
-        return name.get();
-    }
-
-    public void setPhone(Phone phone) {
-        this.phone.set(requireNonNull(phone));
-    }
-
-    @Override
-    public ObjectProperty<Phone> phoneProperty() {
+    public Phone getPhone() {
         return phone;
     }
 
-    @Override
-    public Phone getPhone() {
-        return phone.get();
-    }
-
-    public void setEmail(Email email) {
-        this.email.set(requireNonNull(email));
-    }
-
-    @Override
-    public ObjectProperty<Email> emailProperty() {
+    public Email getEmail() {
         return email;
     }
 
-    @Override
-    public Email getEmail() {
-        return email.get();
-    }
-
-    public void setAddress(Address address) {
-        this.address.set(requireNonNull(address));
-    }
-
-    @Override
-    public ObjectProperty<Address> addressProperty() {
+    public Address getAddress() {
         return address;
     }
 
-    @Override
-    public Address getAddress() {
-        return address.get();
+    public Remark getRemark() {
+        return remark;
     }
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    @Override
     public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags.get().toSet());
-    }
-
-    public ObjectProperty<UniqueTagList> tagProperty() {
-        return tags;
+        return Collections.unmodifiableSet(tags);
     }
 
     /**
-     * Replaces this person's tags with the tags in the argument tag set.
+     * Returns true if both persons of the same name have at least one other identity field that is the same.
+     * This defines a weaker notion of equality between two persons.
      */
-    public void setTags(Set<Tag> replacement) {
-        tags.set(new UniqueTagList(replacement));
+    public boolean isSamePerson(Person otherPerson) {
+        if (otherPerson == this) {
+            return true;
+        }
+
+        return otherPerson != null
+                && otherPerson.getName().equals(getName())
+                && (otherPerson.getPhone().equals(getPhone()) || otherPerson.getEmail().equals(getEmail()));
     }
 
+    /**
+     * Returns true if both persons have the same identity and data fields.
+     * This defines a stronger notion of equality between two persons.
+     */
     @Override
     public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof ReadOnlyPerson // instanceof handles nulls
-                && this.isSameStateAs((ReadOnlyPerson) other));
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof Person)) {
+            return false;
+        }
+
+        Person otherPerson = (Person) other;
+        return otherPerson.getName().equals(getName())
+                && otherPerson.getPhone().equals(getPhone())
+                && otherPerson.getEmail().equals(getEmail())
+                && otherPerson.getAddress().equals(getAddress())
+                && otherPerson.getTags().equals(getTags());
     }
 
     @Override
@@ -137,7 +110,17 @@ public class Person implements ReadOnlyPerson {
 
     @Override
     public String toString() {
-        return getAsText();
+        final StringBuilder builder = new StringBuilder();
+        builder.append(getName())
+                .append(" Phone: ")
+                .append(getPhone())
+                .append(" Email: ")
+                .append(getEmail())
+                .append(" Address: ")
+                .append(getAddress())
+                .append(" Tags: ");
+        getTags().forEach(builder::append);
+        return builder.toString();
     }
 
 }

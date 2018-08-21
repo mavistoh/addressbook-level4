@@ -1,8 +1,7 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
-
-import seedu.address.commons.exceptions.IllegalValueException;
+import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's name in the address book.
@@ -11,7 +10,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class Name {
 
     public static final String MESSAGE_NAME_CONSTRAINTS =
-            "Person names should only contain alphanumeric characters and spaces, and it should not be blank";
+            "Names should only contain alphanumeric characters and spaces, and it should not be blank";
 
     /*
      * The first character of the address must not be a whitespace,
@@ -22,21 +21,18 @@ public class Name {
     public final String fullName;
 
     /**
-     * Validates given name.
+     * Constructs a {@code Name}.
      *
-     * @throws IllegalValueException if given name string is invalid.
+     * @param name A valid name.
      */
-    public Name(String name) throws IllegalValueException {
+    public Name(String name) {
         requireNonNull(name);
-        String trimmedName = name.trim();
-        if (!isValidName(trimmedName)) {
-            throw new IllegalValueException(MESSAGE_NAME_CONSTRAINTS);
-        }
-        this.fullName = trimmedName;
+        checkArgument(isValidName(name), MESSAGE_NAME_CONSTRAINTS);
+        fullName = name;
     }
 
     /**
-     * Returns true if a given string is a valid person name.
+     * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
         return test.matches(NAME_VALIDATION_REGEX);
@@ -52,7 +48,7 @@ public class Name {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof Name // instanceof handles nulls
-                && this.fullName.equals(((Name) other).fullName)); // state check
+                && fullName.equals(((Name) other).fullName)); // state check
     }
 
     @Override

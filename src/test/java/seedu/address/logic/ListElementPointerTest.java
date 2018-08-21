@@ -3,7 +3,6 @@ package seedu.address.logic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +23,16 @@ public class ListElementPointerTest {
         pointerElements = new ArrayList<>();
         pointerElements.add(FIRST_ELEMENT);
         pointerElements.add(SECOND_ELEMENT);
+    }
+
+    @Test
+    public void constructor_defensiveCopy_backingListUnmodified() {
+        List<String> list = new ArrayList<>();
+        pointer = new ListElementPointer(list);
+        list.add(FIRST_ELEMENT);
+
+        ListElementPointer emptyPointer = new ListElementPointer(Collections.emptyList());
+        assertEquals(emptyPointer, pointer);
     }
 
     @Test
@@ -130,7 +139,7 @@ public class ListElementPointerTest {
         assertFalse(pointer.hasNext());
         try {
             pointer.next();
-            fail("The expected NoSuchElementException was not thrown");
+            throw new AssertionError("The expected NoSuchElementException was not thrown.");
         } catch (NoSuchElementException e) {
             // expected exception thrown
         }
@@ -144,7 +153,7 @@ public class ListElementPointerTest {
         assertFalse(pointer.hasPrevious());
         try {
             pointer.previous();
-            fail("The expected NoSuchElementException was not thrown");
+            throw new AssertionError("The expected NoSuchElementException was not thrown.");
         } catch (NoSuchElementException e) {
             // expected exception thrown
         }
@@ -158,7 +167,7 @@ public class ListElementPointerTest {
         assertFalse(pointer.hasCurrent());
         try {
             pointer.current();
-            fail("The expected NoSuchElementException was not thrown");
+            throw new AssertionError("The expected NoSuchElementException was not thrown.");
         } catch (NoSuchElementException e) {
             // expected exception thrown
         }

@@ -1,8 +1,7 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
-
-import seedu.address.commons.exceptions.IllegalValueException;
+import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's address in the address book.
@@ -11,7 +10,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class Address {
 
     public static final String MESSAGE_ADDRESS_CONSTRAINTS =
-            "Person addresses can take any values, and it should not be blank";
+            "Addresses can take any values, and it should not be blank";
 
     /*
      * The first character of the address must not be a whitespace,
@@ -22,20 +21,18 @@ public class Address {
     public final String value;
 
     /**
-     * Validates given address.
+     * Constructs an {@code Address}.
      *
-     * @throws IllegalValueException if given address string is invalid.
+     * @param address A valid address.
      */
-    public Address(String address) throws IllegalValueException {
+    public Address(String address) {
         requireNonNull(address);
-        if (!isValidAddress(address)) {
-            throw new IllegalValueException(MESSAGE_ADDRESS_CONSTRAINTS);
-        }
-        this.value = address;
+        checkArgument(isValidAddress(address), MESSAGE_ADDRESS_CONSTRAINTS);
+        value = address;
     }
 
     /**
-     * Returns true if a given string is a valid person email.
+     * Returns true if a given string is a valid email.
      */
     public static boolean isValidAddress(String test) {
         return test.matches(ADDRESS_VALIDATION_REGEX);
@@ -50,7 +47,7 @@ public class Address {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof Address // instanceof handles nulls
-                && this.value.equals(((Address) other).value)); // state check
+                && value.equals(((Address) other).value)); // state check
     }
 
     @Override

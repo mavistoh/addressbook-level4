@@ -40,6 +40,13 @@ public class GuiRobot extends FxRobot {
     }
 
     /**
+     * Returns true if tests are run in headless mode.
+     */
+    public boolean isHeadlessMode() {
+        return isHeadlessMode;
+    }
+
+    /**
      * Waits for {@code event} to be true by {@code DEFAULT_WAIT_FOR_EVENT_TIMEOUT_MILLISECONDS} milliseconds.
      *
      * @throws EventTimeoutException if the time taken exceeds {@code DEFAULT_WAIT_FOR_EVENT_TIMEOUT_MILLISECONDS}
@@ -75,9 +82,16 @@ public class GuiRobot extends FxRobot {
      * Returns true if the window with {@code stageTitle} is currently open.
      */
     public boolean isWindowShown(String stageTitle) {
-        return listTargetWindows().stream()
+        return getNumberOfWindowsShown(stageTitle) >= 1;
+    }
+
+    /**
+     * Returns the number of windows with {@code stageTitle} that are currently open.
+     */
+    public int getNumberOfWindowsShown(String stageTitle) {
+        return (int) listTargetWindows().stream()
                 .filter(window -> window instanceof Stage && ((Stage) window).getTitle().equals(stageTitle))
-                .count() >= 1;
+                .count();
     }
 
     /**
@@ -89,7 +103,7 @@ public class GuiRobot extends FxRobot {
      */
     public Stage getStage(String stageTitle) {
         Optional<Stage> targetStage = listTargetWindows().stream()
-                .filter(Stage.class::isInstance)    // checks that the window is of type Stage
+                .filter(Stage.class::isInstance) // checks that the window is of type Stage
                 .map(Stage.class::cast)
                 .filter(stage -> stage.getTitle().equals(stageTitle))
                 .findFirst();

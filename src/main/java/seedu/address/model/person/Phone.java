@@ -1,8 +1,7 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
-
-import seedu.address.commons.exceptions.IllegalValueException;
+import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's phone number in the address book.
@@ -12,26 +11,23 @@ public class Phone {
 
 
     public static final String MESSAGE_PHONE_CONSTRAINTS =
-            "Phone numbers can only contain numbers, and should be at least 3 digits long";
+            "Phone numbers should only contain numbers, and it should be at least 3 digits long";
     public static final String PHONE_VALIDATION_REGEX = "\\d{3,}";
     public final String value;
 
     /**
-     * Validates given phone number.
+     * Constructs a {@code Phone}.
      *
-     * @throws IllegalValueException if given phone string is invalid.
+     * @param phone A valid phone number.
      */
-    public Phone(String phone) throws IllegalValueException {
+    public Phone(String phone) {
         requireNonNull(phone);
-        String trimmedPhone = phone.trim();
-        if (!isValidPhone(trimmedPhone)) {
-            throw new IllegalValueException(MESSAGE_PHONE_CONSTRAINTS);
-        }
-        this.value = trimmedPhone;
+        checkArgument(isValidPhone(phone), MESSAGE_PHONE_CONSTRAINTS);
+        value = phone;
     }
 
     /**
-     * Returns true if a given string is a valid person phone number.
+     * Returns true if a given string is a valid phone number.
      */
     public static boolean isValidPhone(String test) {
         return test.matches(PHONE_VALIDATION_REGEX);
@@ -46,7 +42,7 @@ public class Phone {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof Phone // instanceof handles nulls
-                && this.value.equals(((Phone) other).value)); // state check
+                && value.equals(((Phone) other).value)); // state check
     }
 
     @Override
